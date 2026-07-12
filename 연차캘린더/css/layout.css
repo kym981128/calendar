@@ -1,0 +1,121 @@
+.app-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-5);
+}
+
+/* 헤더 */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.app-header-title { display: flex; align-items: center; gap: var(--space-3); }
+.app-header .icon { color: var(--color-primary); width: 32px; height: 32px; }
+.app-header h1 { font-size: 22px; }
+
+/* 통계 3카드 */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+/* 연간 캘린더 패널 (전체 폭) */
+.calendar-panel { margin-bottom: var(--space-5); }
+
+.calendar-panel-header { margin-bottom: var(--space-3); }
+.calendar-panel-header h2 { margin-bottom: var(--space-1); }
+
+.calendar-legend {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-sub); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.legend-dot-holiday { background: var(--color-holiday); }
+.legend-dot-custom { background: transparent; box-shadow: inset 0 0 0 1.5px var(--color-holiday); }
+.legend-dot-used { background: var(--color-primary); }
+.legend-dot-today { background: transparent; box-shadow: inset 0 0 0 1.5px var(--color-primary); }
+
+.year-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+/* 추천 + 검색/필터 (캘린더 아래 2단) */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.recommend-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+.recommend-header .icon { color: var(--color-primary); width: 22px; height: 22px; }
+.recommend-list { margin-top: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); }
+
+/* 반응형 */
+@media (max-width: 1100px) {
+  .year-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .bottom-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 700px) {
+  .year-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .app-shell { padding: var(--space-4); }
+}
+
+@media (max-width: 420px) {
+  .year-grid { grid-template-columns: 1fr; }
+}
+
+/* 소개 / 이용안내 / FAQ */
+.info-panel h2 { margin-bottom: var(--space-2); }
+.info-panel h3 { font-size: 15px; margin: var(--space-5) 0 var(--space-3); }
+.info-panel p { color: var(--color-sub); font-size: 14px; line-height: 1.7; }
+.info-list { list-style: disc; padding-left: var(--space-4); color: var(--color-sub); font-size: 14px; line-height: 1.8; }
+.info-list li { margin-bottom: var(--space-1); }
+.info-list strong { color: var(--color-text); }
+
+.faq-list { display: flex; flex-direction: column; gap: var(--space-4); }
+.faq-item .faq-q { font-weight: 700; font-size: 14px; margin-bottom: var(--space-1); }
+.faq-item .faq-a { color: var(--color-sub); font-size: 14px; line-height: 1.7; }
+
+/* 푸터 */
+.app-footer {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+}
+.app-footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  color: var(--color-sub);
+  font-size: 13px;
+}
+.app-footer-nav { display: flex; gap: var(--space-4); }
+.app-footer-nav a { color: var(--color-sub); text-decoration: none; }
+.app-footer-nav a:hover { color: var(--color-primary); text-decoration: underline; }
