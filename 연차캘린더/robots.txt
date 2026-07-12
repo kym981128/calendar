@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://kym981128.github.io/calendar/sitemap.xml
