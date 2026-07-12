@@ -1,0 +1,23 @@
+/* 디자인 시스템 변수 — 색 조합: 노션 · 모노톤 / 버튼: 라운드 / 폰트: Montserrat */
+:root {
+  --color-primary: #2383E2;
+  --color-text: #191919;
+  --color-sub: #787774;
+  --color-bg: #FFFFFF;
+  --color-surface: #F7F6F3;
+  --color-border: #E9E9E7;
+  --color-holiday: #E5484D; /* 공휴일 강조용 (모노톤 팔레트에 없는 보조 색상, 최소 범위로만 사용) */
+
+  --radius-btn: 10px;
+  --radius-card: 12px;
+  --radius-tag: 8px;
+
+  --font-family: 'Montserrat', sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+}
