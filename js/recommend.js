@@ -74,9 +74,10 @@ function renderRecommend() {
   const listEl = document.getElementById('recommendList');
   listEl.innerHTML = '';
 
-  const remaining = AppState.totalLeave - AppState.usedDates.size;
+  const remaining = AppState.remaining();
   const candidates = computeBridgeCandidates(AppState.year, MAX_BRIDGE_LEN)
     .filter(c => !c.gapDates.every(d => AppState.isUsed(d)))
+    .filter(c => !c.gapDates.some(d => isPastDate(parseISODate(d)) && !AppState.isUsed(d)))
     .slice(0, 3);
 
   if (candidates.length === 0) {

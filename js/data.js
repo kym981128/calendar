@@ -29,16 +29,28 @@ function parseISODate(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
   return new Date(y, m - 1, d);
 }
+function todayISODate() {
+  const now = new Date();
+  return toISODate(now.getFullYear(), now.getMonth(), now.getDate());
+}
+function isPastDate(dateObj) {
+  return dateObj < parseISODate(AppState.today);
+}
+// 연차 일수는 반차(0.5일) 단위까지 다루므로, 부동소수점 오차를 피하기 위해
+// 내부적으로는 0.5일 = 1 유닛인 정수 단위로 계산한다.
+function toUnits(days) { return Math.round(days * 2); }
+function fromUnits(units) { return units / 2; }
+function isHalfStep(n) { return Math.abs(n * 2 - Math.round(n * 2)) < 1e-9; }
 
 const AppState = {
   year: 2026,
   totalLeave: 15,
-  today: '2026-07-11',
+  today: todayISODate(),
   holidayMap: new Map(KR_HOLIDAYS_2026.map(h => [h.date, h.name])),
   holidayList: KR_HOLIDAYS_2026,
   customHolidayMap: new Map(), // 사용자가 추가한 나만의 공휴일
-  // 더미: 이미 신청된 연차 (신정 다음날, 어린이날 앞 브릿지데이)
-  usedDates: new Set(['2026-01-02', '2026-05-04']),
+  usedDates: new Map(), // dateStr -> 'full' | 'half'
+  manualUsedLeave: 0, // 캘린더에 표시되지 않은, 직접 입력한 기사용 연차(일 단위, 0.5 단위 가능)
   _listeners: [],
 
   onChange(fn) { this._listeners.push(fn); },
@@ -49,17 +61,35 @@ const AppState = {
   isHoliday(dateStr) { return this.isOfficialHoliday(dateStr) || this.isCustomHoliday(dateStr); },
   holidayName(dateStr) { return this.holidayMap.get(dateStr) || this.customHolidayMap.get(dateStr); },
   isUsed(dateStr) { return this.usedDates.has(dateStr); },
+  usedType(dateStr) { return this.usedDates.get(dateStr); },
 
+  // 달력에서 클릭으로 표시한 연차만 유닛으로 환산 (연차=2유닛, 반차=1유닛)
+  calendarUsedUnits() {
+    let units = 0;
+    this.usedDates.forEach(type => { units += type === 'half' ? 1 : 2; });
+    return units;
+  },
+  usedUnitsTotal() { return this.calendarUsedUnits() + toUnits(this.manualUsedLeave); },
+  usedTotal() { return fromUnits(this.usedUnitsTotal()); },
+  remainingUnits() { return toUnits(this.totalLeave) - this.usedUnitsTotal(); },
+  remaining() { return fromUnits(this.remainingUnits()); },
+
+  // 평일 클릭 시 '없음 → 연차 → 반차 → 없음' 순으로 전환된다.
   toggleDate(dateStr, dateObj) {
     if (this.isHoliday(dateStr) || isWeekend(dateObj)) return;
-    if (this.usedDates.has(dateStr)) {
+    if (isPastDate(dateObj)) return;
+
+    const current = this.usedDates.get(dateStr);
+    if (current === 'full') {
+      this.usedDates.set(dateStr, 'half');
+    } else if (current === 'half') {
       this.usedDates.delete(dateStr);
     } else {
-      if (this.usedDates.size >= this.totalLeave) {
+      if (this.remainingUnits() < 2) {
         alert('남은 연차가 없습니다.');
         return;
       }
-      this.usedDates.add(dateStr);
+      this.usedDates.set(dateStr, 'full');
     }
     this._emit();
   },
@@ -87,19 +117,35 @@ const AppState = {
   resetAll() {
     this.usedDates.clear();
     this.customHolidayMap.clear();
+    this.manualUsedLeave = 0;
     this._emit();
   },
 
   setTotalLeave(n) {
-    if (!Number.isInteger(n) || n < 0) {
-      alert('연차 일수는 0 이상의 정수로 입력해주세요.');
+    if (typeof n !== 'number' || Number.isNaN(n) || n < 0 || !isHalfStep(n)) {
+      alert('연차 일수는 0 이상, 0.5일 단위의 숫자로 입력해주세요.');
       return false;
     }
-    if (n < this.usedDates.size) {
-      alert(`이미 사용한 연차가 ${this.usedDates.size}일이라 그보다 적게 설정할 수 없어요.`);
+    if (toUnits(n) < this.usedUnitsTotal()) {
+      alert(`이미 사용 처리된 연차가 ${this.usedTotal()}일이라 그보다 적게 설정할 수 없어요.`);
       return false;
     }
     this.totalLeave = n;
+    this._emit();
+    return true;
+  },
+
+  // 캘린더 클릭과 별개로, 이미 사용한 연차 일수를 직접 입력해 총량에 반영한다.
+  setManualUsedLeave(n) {
+    if (typeof n !== 'number' || Number.isNaN(n) || n < 0 || !isHalfStep(n)) {
+      alert('사용 연차는 0 이상, 0.5일 단위의 숫자로 입력해주세요.');
+      return false;
+    }
+    if (toUnits(n) + this.calendarUsedUnits() > toUnits(this.totalLeave)) {
+      alert('입력한 사용 연차가 총 연차보다 많습니다.');
+      return false;
+    }
+    this.manualUsedLeave = n;
     this._emit();
     return true;
   },

@@ -46,9 +46,12 @@ function buildMiniMonth(year, monthIndex) {
     const weekend = isWeekend(dateObj);
     const officialHoliday = AppState.isOfficialHoliday(dateStr);
     const customHoliday = AppState.isCustomHoliday(dateStr);
-    const used = AppState.isUsed(dateStr);
+    const usedType = AppState.usedType(dateStr);
+    const past = isPastDate(dateObj);
 
     if (weekend) cell.classList.add('is-weekend');
+    if (past) cell.classList.add('is-past');
+
     if (officialHoliday) {
       cell.classList.add('is-holiday');
       cell.title = AppState.holidayName(dateStr);
@@ -59,8 +62,11 @@ function buildMiniMonth(year, monthIndex) {
       cell.disabled = true;
     } else if (weekend) {
       cell.disabled = true;
+    } else if (past) {
+      cell.disabled = true;
     }
-    if (used) cell.classList.add('is-used');
+    if (usedType === 'full') cell.classList.add('is-used');
+    else if (usedType === 'half') { cell.classList.add('is-half'); cell.title = '반차'; }
     if (dateStr === AppState.today) cell.classList.add('is-today');
 
     cell.addEventListener('click', () => AppState.toggleDate(dateStr, dateObj));

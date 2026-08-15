@@ -11,9 +11,18 @@ document.getElementById('resetAllBtn').addEventListener('click', () => {
 });
 
 document.getElementById('editTotalLeaveBtn').addEventListener('click', () => {
-  const input = prompt('올해 총 연차 일수를 입력하세요.', AppState.totalLeave);
+  const input = prompt('올해 총 연차 일수를 입력하세요. (0.5일 단위 가능)', AppState.totalLeave);
   if (input === null) return;
   AppState.setTotalLeave(Number(input));
+});
+
+document.getElementById('editManualUsedBtn').addEventListener('click', () => {
+  const input = prompt(
+    '달력에 표시하지 않고, 이미 사용한 연차 일수를 직접 입력하세요. (0.5일 단위 가능)',
+    AppState.manualUsedLeave
+  );
+  if (input === null) return;
+  AppState.setManualUsedLeave(Number(input));
 });
 
 function render() {
