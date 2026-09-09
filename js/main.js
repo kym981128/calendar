@@ -5,7 +5,7 @@ document.getElementById('iconCalendar').innerHTML = ICONS.calendar;
 document.getElementById('iconBrain').innerHTML = ICONS.brain;
 
 document.getElementById('resetAllBtn').addEventListener('click', () => {
-  if (confirm('사용한 연차와 나만의 공휴일을 모두 초기화할까요?')) {
+  if (confirm('사용한 연차, 나만의 공휴일, 메모를 모두 초기화할까요? 이 브라우저에 저장된 데이터가 모두 삭제됩니다.')) {
     AppState.resetAll();
   }
 });
@@ -30,9 +30,12 @@ function render() {
   renderStats();
   renderRecommend();
   renderCustomHolidayList();
+  renderMemoList();
 }
 
+AppState.load();
 AppState.onChange(render);
 initCustomHolidayForm();
+initMemoForm();
 render();
 renderHolidayList();

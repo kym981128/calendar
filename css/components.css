@@ -139,6 +139,25 @@
 .day.is-today { box-shadow: inset 0 0 0 1.5px var(--color-primary); }
 .day.is-today.is-used { box-shadow: inset 0 0 0 1.5px #fff; }
 
+/* 메모가 있는 날짜 표시 (우측 상단 점) */
+.day.has-memo {
+  position: relative;
+}
+.day.has-memo::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-sub);
+}
+.day.is-used.has-memo::before,
+.day.is-half.has-memo::before {
+  background: #fff;
+}
+
 /* 나만의 공휴일(사용자 지정) 날짜 표시 */
 .day.is-custom-holiday {
   position: relative;

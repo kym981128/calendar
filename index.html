@@ -57,6 +57,15 @@
     <button class="btn btn-outline btn-sm" id="resetAllBtn">전체 초기화</button>
   </header>
 
+  <nav class="site-nav">
+    <a href="index.html" class="is-active">연차 캘린더</a>
+    <a href="salary.html">연봉 실수령액 계산기</a>
+    <a href="severance.html">퇴직금 계산기</a>
+    <a href="leave-payout.html">연차수당 계산기</a>
+    <a href="overtime.html">야근수당 계산기</a>
+    <a href="guide.html">연차·공휴일 가이드</a>
+  </nav>
+
   <section class="stats-row">
     <div class="card stat-card">
       <div id="iconPlane"></div>
@@ -97,6 +106,17 @@
     <div class="year-grid" id="yearGrid"></div>
   </section>
 
+  <section class="card memo-panel" id="memoPanel">
+    <h2>내 일정 메모</h2>
+    <p class="text-sub">연차든 평일이든 상관없이, 날짜에 짧은 메모를 남겨보세요. 캘린더에도 점으로 표시되고 아래 목록에서 한눈에 볼 수 있어요.</p>
+    <form id="memoForm" class="custom-holiday-form">
+      <input type="date" id="memoDate" min="2026-01-01" max="2026-12-31" required>
+      <input type="text" id="memoText" placeholder="예: 친구 결혼식, 병원 예약" maxlength="30" required>
+      <button type="submit" class="btn btn-sm">추가</button>
+    </form>
+    <div class="custom-holiday-list" id="memoList"></div>
+  </section>
+
   <section class="bottom-grid">
     <div class="card recommend-card" id="recommendPanel">
       <div class="recommend-header">
@@ -134,6 +154,7 @@
       <li><strong>연차 사용/취소</strong> — 평일을 클릭하면 연차로 표시되고, 다시 클릭하면 취소됩니다. 사용한 연차와 남은 연차가 자동으로 계산됩니다.</li>
       <li><strong>연차 추천</strong> — 주말과 공휴일 사이에 낀 근무일을 찾아, 최소한의 연차로 긴 연휴를 만드는 방법을 추천합니다.</li>
       <li><strong>나만의 공휴일 등록</strong> — 회사 창립일이나 임시 휴무일 등 개인 일정을 캘린더에 추가할 수 있습니다.</li>
+      <li><strong>날짜별 메모</strong> — 연차를 쓴 이유나 병원 예약, 경조사 같은 개인 일정을 날짜에 메모로 남기고 목록으로 모아볼 수 있습니다.</li>
     </ul>
 
     <h3>2026년 연차, 이렇게 계획하면 좋아요</h3>
@@ -146,7 +167,7 @@
     <div class="faq-list">
       <div class="faq-item">
         <p class="faq-q">Q. 입력한 연차 데이터는 어디에 저장되나요?</p>
-        <p class="faq-a">A. 별도의 서버 저장 없이 현재 브라우저 화면에서만 계산됩니다. 페이지를 새로고침하면 초기화되니, 총 연차 개수를 다시 설정한 뒤 이용해주세요.</p>
+        <p class="faq-a">A. 이용 중인 브라우저(이 기기)에만 저장되며, 서버로 전송되지 않습니다. 새로고침하거나 나중에 다시 방문해도 그대로 남아있어요. 다만 다른 기기나 다른 브라우저에서는 보이지 않고, 브라우저 데이터를 삭제하면 함께 사라집니다.</p>
       </div>
       <div class="faq-item">
         <p class="faq-q">Q. 회원가입이 필요한가요?</p>
@@ -186,6 +207,7 @@
     <span>&copy; 2026 연차 플래너</span>
     <nav class="app-footer-nav">
       <a href="guide.html">연차·공휴일 가이드</a>
+      <a href="about.html">사이트 소개</a>
       <a href="privacy.html">개인정보처리방침</a>
       <a href="mailto:kym981128@gmail.com">문의하기</a>
     </nav>
@@ -198,6 +220,7 @@
 <script src="js/holidays.js"></script>
 <script src="js/recommend.js"></script>
 <script src="js/stats.js"></script>
+<script src="js/memo.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

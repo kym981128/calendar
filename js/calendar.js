@@ -69,6 +69,12 @@ function buildMiniMonth(year, monthIndex) {
     else if (usedType === 'half') { cell.classList.add('is-half'); cell.title = '반차'; }
     if (dateStr === AppState.today) cell.classList.add('is-today');
 
+    const memo = AppState.getMemo(dateStr);
+    if (memo) {
+      cell.classList.add('has-memo');
+      cell.title = cell.title ? `${cell.title} · ${memo}` : memo;
+    }
+
     cell.addEventListener('click', () => AppState.toggleDate(dateStr, dateObj));
     daysGrid.appendChild(cell);
   }

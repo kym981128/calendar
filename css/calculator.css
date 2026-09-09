@@ -1,0 +1,86 @@
+/* 미니 도구(연봉/퇴직금/야근수당 계산기) 공통 스타일 */
+.calc-form {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.calc-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+.calc-field .calc-hint {
+  font-size: 12px;
+  color: var(--color-sub);
+  margin-top: 4px;
+}
+.calc-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.calc-input-row input,
+.calc-input-row select {
+  flex: 1;
+  font-family: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  min-width: 0;
+}
+.calc-input-row .calc-unit {
+  font-size: 13px;
+  color: var(--color-sub);
+  white-space: nowrap;
+}
+.calc-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+@media (max-width: 560px) {
+  .calc-grid-2 { grid-template-columns: 1fr; }
+}
+
+.calc-result {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+.calc-result-main {
+  text-align: center;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.calc-result-main .calc-result-label { font-size: 13px; color: var(--color-sub); margin-bottom: 4px; }
+.calc-result-main .calc-result-value { font-size: 30px; font-weight: 700; color: var(--color-primary); }
+.calc-result-rows { display: flex; flex-direction: column; gap: 8px; }
+.calc-result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+}
+.calc-result-row .calc-result-row-label { color: var(--color-sub); }
+.calc-result-row .calc-result-row-value { font-weight: 600; }
+.calc-result-row.is-total {
+  padding-top: 8px;
+  margin-top: 4px;
+  border-top: 1px dashed var(--color-border);
+  font-weight: 700;
+}
+.calc-disclaimer {
+  font-size: 12px;
+  color: var(--color-sub);
+  line-height: 1.6;
+  background: var(--color-bg);
+  border-radius: 8px;
+  padding: var(--space-3);
+  margin-top: var(--space-4);
+}

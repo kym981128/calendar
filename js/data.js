@@ -42,6 +42,8 @@ function toUnits(days) { return Math.round(days * 2); }
 function fromUnits(units) { return units / 2; }
 function isHalfStep(n) { return Math.abs(n * 2 - Math.round(n * 2)) < 1e-9; }
 
+const STORAGE_KEY = 'yeonchaPlanner_state_v1';
+
 const AppState = {
   year: 2026,
   totalLeave: 15,
@@ -51,10 +53,41 @@ const AppState = {
   customHolidayMap: new Map(), // 사용자가 추가한 나만의 공휴일
   usedDates: new Map(), // dateStr -> 'full' | 'half'
   manualUsedLeave: 0, // 캘린더에 표시되지 않은, 직접 입력한 기사용 연차(일 단위, 0.5 단위 가능)
+  memoMap: new Map(), // dateStr -> 메모 텍스트
   _listeners: [],
 
   onChange(fn) { this._listeners.push(fn); },
-  _emit() { this._listeners.forEach(fn => fn()); },
+  _emit() { this.save(); this._listeners.forEach(fn => fn()); },
+
+  // 브라우저(이 기기의 이 브라우저)에만 저장 — 서버로 전송되지 않는다.
+  save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        totalLeave: this.totalLeave,
+        manualUsedLeave: this.manualUsedLeave,
+        usedDates: Array.from(this.usedDates.entries()),
+        customHolidayMap: Array.from(this.customHolidayMap.entries()),
+        memoMap: Array.from(this.memoMap.entries()),
+      }));
+    } catch (e) {
+      // 시크릿 모드 등으로 localStorage를 쓸 수 없는 경우 조용히 무시한다.
+    }
+  },
+
+  load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (typeof data.totalLeave === 'number') this.totalLeave = data.totalLeave;
+      if (typeof data.manualUsedLeave === 'number') this.manualUsedLeave = data.manualUsedLeave;
+      if (Array.isArray(data.usedDates)) this.usedDates = new Map(data.usedDates);
+      if (Array.isArray(data.customHolidayMap)) this.customHolidayMap = new Map(data.customHolidayMap);
+      if (Array.isArray(data.memoMap)) this.memoMap = new Map(data.memoMap);
+    } catch (e) {
+      // 저장된 데이터가 손상된 경우 무시하고 기본값으로 시작한다.
+    }
+  },
 
   isOfficialHoliday(dateStr) { return this.holidayMap.has(dateStr); },
   isCustomHoliday(dateStr) { return this.customHolidayMap.has(dateStr); },
@@ -117,7 +150,20 @@ const AppState = {
   resetAll() {
     this.usedDates.clear();
     this.customHolidayMap.clear();
+    this.memoMap.clear();
     this.manualUsedLeave = 0;
+    this._emit();
+  },
+
+  getMemo(dateStr) { return this.memoMap.get(dateStr) || ''; },
+  setMemo(dateStr, text) {
+    const trimmed = (text || '').trim().slice(0, 30);
+    if (!trimmed) return;
+    this.memoMap.set(dateStr, trimmed);
+    this._emit();
+  },
+  removeMemo(dateStr) {
+    this.memoMap.delete(dateStr);
     this._emit();
   },
 

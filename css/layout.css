@@ -16,6 +16,25 @@
 .app-header .icon { color: var(--color-primary); width: 32px; height: 32px; }
 .app-header h1 { font-size: 22px; }
 
+/* 사이트 공통 상단 내비게이션 (캘린더/미니 도구/가이드 간 이동) */
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+.site-nav a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-sub);
+  padding: 8px 14px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+.site-nav a:hover { color: var(--color-text); background: var(--color-bg); }
+.site-nav a.is-active { color: #fff; background: var(--color-primary); border-color: var(--color-primary); }
+
 /* 통계 3카드 */
 .stats-row {
   display: grid;
